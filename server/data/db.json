@@ -1,0 +1,95 @@
+{
+  "transactions": [
+    {
+      "title": "Transfer to Ali",
+      "amount": 2000,
+      "category": "Transfer",
+      "date": "2025-12-15",
+      "type": "expense",
+      "id": 1765813426381
+    },
+    {
+      "title": "Water Bill (CDA)",
+      "amount": 800,
+      "category": "Bills",
+      "date": "2025-12-15",
+      "type": "expense",
+      "id": 1765812953278
+    },
+    {
+      "id": 1765784022178,
+      "title": "Fancy Dinner",
+      "amount": 900,
+      "category": "Food",
+      "date": "2025-12-15",
+      "type": "expense"
+    },
+    {
+      "id": 1765784020020,
+      "title": "Fancy Dinner",
+      "amount": 900,
+      "category": "Food",
+      "date": "2025-12-15",
+      "type": "expense"
+    },
+    {
+      "id": 1,
+      "title": "Grocery Shopping",
+      "amount": 1200,
+      "category": "Food",
+      "date": "2023-10-24",
+      "type": "expense"
+    },
+    {
+      "id": 2,
+      "title": "Uber Ride",
+      "amount": 350,
+      "category": "Transport",
+      "date": "2023-10-25",
+      "type": "expense"
+    },
+    {
+      "id": 3,
+      "title": "Freelance Payment",
+      "amount": 15000,
+      "category": "Income",
+      "date": "2023-10-26",
+      "type": "income"
+    }
+  ],
+  "budget": 20000,
+  "goals": [
+    {
+      "id": 1,
+      "name": "New Laptop",
+      "target": 80000,
+      "current": 15000,
+      "color": "#6366F1"
+    },
+    {
+      "id": 2,
+      "name": "Emergency Fund",
+      "target": 50000,
+      "current": 20000,
+      "color": "#10B981"
+    },
+    {
+      "name": "iphone 15",
+      "target": 150000,
+      "months": 5,
+      "color": "#8B5CF6",
+      "id": 1765784000240,
+      "current": 0
+    }
+  ],
+  "savingsPocket": 2850,
+  "users": [
+    {
+      "id": "1765812880201",
+      "name": "owais awan",
+      "email": "owais@gmail.com",
+      "password": "123456",
+      "joinedAt": "2025-12-15T15:34:40.201Z"
+    }
+  ]
+}

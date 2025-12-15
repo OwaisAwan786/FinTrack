@@ -1,11 +1,27 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LayoutDashboard, Receipt, Target, BrainCircuit, Settings, LogOut } from 'lucide-react';
+import { useFinTrack } from '../context/FinTrackContext';
+import {
+    LayoutDashboard,
+    Receipt,
+    Target,
+    BrainCircuit,
+    Send,
+    Zap,
+    CreditCard,
+    User,
+    LogOut
+} from 'lucide-react';
 
 const Sidebar = () => {
+    const { logout } = useFinTrack();
+
     const navItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/' },
         { icon: Receipt, label: 'Transactions', path: '/transactions' },
+        { icon: Send, label: 'Transfer', path: '/transfer' },
+        { icon: Zap, label: 'Bill Payments', path: '/bills' },
+        { icon: CreditCard, label: 'My Cards', path: '/cards' },
         { icon: Target, label: 'Goals', path: '/goals' },
         { icon: BrainCircuit, label: 'AI Advisor', path: '/advisor' },
     ];
@@ -22,7 +38,7 @@ const Sidebar = () => {
                     </h1>
                 </div>
 
-                <nav className="flex-1 flex flex-col gap-2">
+                <nav className="flex-1 flex flex-col gap-2 overflow-y-auto scrollbar-hide">
                     {navItems.map((item) => (
                         <NavLink
                             key={item.path}
@@ -45,11 +61,20 @@ const Sidebar = () => {
                 </nav>
 
                 <div className="border-t border-gray-700/50 pt-6 mt-6">
-                    <button className="flex items-center gap-3 px-4 py-3 w-full text-gray-400 hover:text-white hover:bg-white/5 rounded-lg transition-all">
-                        <Settings size={20} />
-                        <span>Settings</span>
-                    </button>
-                    <button className="flex items-center gap-3 px-4 py-3 w-full text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all mt-2">
+                    <NavLink
+                        to="/profile"
+                        className={({ isActive }) =>
+                            `flex items-center gap-3 px-4 py-3 w-full rounded-lg transition-all ${isActive ? 'text-white bg-white/5' : 'text-gray-400 hover:text-white hover:bg-white/5'}`
+                        }
+                    >
+                        <User size={20} />
+                        <span>Profile</span>
+                    </NavLink>
+
+                    <button
+                        onClick={logout}
+                        className="flex items-center gap-3 px-4 py-3 w-full text-red-400 hover:text-red-300 hover:bg-red-500/10 rounded-lg transition-all mt-2"
+                    >
                         <LogOut size={20} />
                         <span>Logout</span>
                     </button>
