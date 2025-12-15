@@ -14,7 +14,7 @@ const Advisor = () => {
         // For now, let's fetch when transactions change to keep it "live"
         const fetchInsights = async () => {
             try {
-                const res = await fetch('http://localhost:3001/api/advisor/insights');
+                const res = await fetch('/api/advisor/insights');
                 const data = await res.json();
                 setInsightsData(data);
                 setLoading(false);

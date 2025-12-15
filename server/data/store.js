@@ -24,15 +24,34 @@ if (!fs.existsSync(path.dirname(DATA_FILE))) {
     fs.mkdirSync(path.dirname(DATA_FILE), { recursive: true });
 }
 
+// In-memory fallback for Vercel (Read-only FS)
+let memoryData = null;
+
 function loadData() {
-    if (fs.existsSync(DATA_FILE)) {
-        return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+    if (memoryData) return memoryData;
+
+    try {
+        if (fs.existsSync(DATA_FILE)) {
+            memoryData = JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
+            return memoryData;
+        }
+    } catch (err) {
+        console.warn("Could not read file, using initial data:", err.message);
     }
-    return initialData;
+
+    memoryData = { ...initialData };
+    return memoryData;
 }
 
 function saveData(data) {
-    fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    memoryData = data;
+
+    try {
+        // Try to write to disk, but don't crash if it fails (Vercel)
+        fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+    } catch (err) {
+        console.warn("Could not save to disk (likely Vercel environment). Data saved to memory only.");
+    }
 }
 
 module.exports = {
