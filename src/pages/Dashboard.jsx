@@ -85,14 +85,18 @@ const Dashboard = () => {
             <div className="w-full max-w-2xl mx-auto relative rounded-xl overflow-hidden border border-slate-700/50 shadow-2xl group">
                 <video
                     ref={videoRef}
-                    src="/assets/dashboard-video.webm"
                     className="w-full h-auto"
                     autoPlay
                     muted
                     loop
                     controls
                     playsInline
-                />
+                >
+                    <source src="/assets/dashboard-video.webm" type="video/webm" />
+                    {/* Fallback for Safari/iOS if user provides mp4 */}
+                    <source src="/assets/dashboard-video.mp4" type="video/mp4" />
+                    Your browser does not support the video tag.
+                </video>
                 {/* Speed Indicator */}
                 <button
                     onClick={handleSpeedChange}
