@@ -23,8 +23,13 @@ const Goals = () => {
         if (months <= 0) return;
 
         const monthlyNeed = target / months;
+        const weeklyNeed = monthlyNeed / 4; // Approx 4 weeks
+        const dailyNeed = monthlyNeed / 30; // Approx 30 days
+
         setPlan({
             monthlyNeed,
+            weeklyNeed,
+            dailyNeed,
             target,
             months
         });
@@ -46,9 +51,9 @@ const Goals = () => {
         <div className="flex flex-col gap-8 pb-10">
             <div>
                 <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-gray-400">
-                    Goal Planner
+                    Smart Goal Planner
                 </h2>
-                <p className="text-gray-400 mt-1">Turn your dreams into reality with a solid financial plan.</p>
+                <p className="text-gray-400 mt-1">Let AI create a perfect savings schedule for you.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
@@ -99,7 +104,7 @@ const Goals = () => {
                             className="btn btn-secondary justify-center w-full mt-2"
                         >
                             <Calculator size={18} />
-                            Calculate Plan
+                            Generate AI Plan
                         </button>
                     </div>
                 </div>
@@ -113,30 +118,41 @@ const Goals = () => {
                             </div>
 
                             <h4 className="text-emerald-400 font-bold mb-4 flex items-center gap-2">
-                                <Sparkles size={18} /> Plan Preview
+                                <Sparkles size={18} /> AI Savings Plan
                             </h4>
 
-                            <div className="space-y-3 relative z-10">
-                                <p className="text-gray-300">
-                                    To save <strong className="text-white">{formatCurrency(plan.target)}</strong> in <strong className="text-white">{plan.months} months</strong>:
+                            <div className="space-y-4 relative z-10">
+                                <p className="text-gray-300 text-sm">
+                                    To save <strong className="text-white">{formatCurrency(plan.target)}</strong> in <strong className="text-white">{plan.months} months</strong>, here is your breakdown:
                                 </p>
 
-                                <div className="text-3xl font-bold text-white my-2">
-                                    {formatCurrency(plan.monthlyNeed)} <span className="text-sm text-gray-400 font-normal">/ month</span>
+                                <div className="grid grid-cols-3 gap-2 mt-2">
+                                    <div className="bg-black/30 p-3 rounded-lg text-center border border-white/5">
+                                        <div className="text-xs text-gray-400 mb-1">Monthly</div>
+                                        <div className="text-sm font-bold text-white">{formatCurrency(plan.monthlyNeed)}</div>
+                                    </div>
+                                    <div className="bg-black/30 p-3 rounded-lg text-center border border-white/5">
+                                        <div className="text-xs text-gray-400 mb-1">Weekly</div>
+                                        <div className="text-sm font-bold text-emerald-400">{formatCurrency(plan.weeklyNeed)}</div>
+                                    </div>
+                                    <div className="bg-black/30 p-3 rounded-lg text-center border border-white/5">
+                                        <div className="text-xs text-gray-400 mb-1">Daily</div>
+                                        <div className="text-sm font-bold text-indigo-400">{formatCurrency(plan.dailyNeed)}</div>
+                                    </div>
                                 </div>
 
-                                <div className="p-3 rounded-lg bg-black/20 text-sm text-gray-400 border border-white/5">
-                                    Your current "Savings Pocket" balance is <span className="text-indigo-400">{formatCurrency(savingsPocket)}</span>.
+                                <div className="p-3 rounded-lg bg-indigo-500/10 text-xs text-indigo-300 border border-indigo-500/20 mt-2">
+                                    <strong className="block mb-1">💡 AI Suggestion:</strong>
                                     {savingsPocket > plan.monthlyNeed
-                                        ? " You're already covered for the first month! 🎉"
-                                        : " Start auto-saving on transactions to reach this faster!"}
+                                        ? "Great! Your current savings are sufficient. Ensure you transfer this amount to your goal."
+                                        : `You need to save ${formatCurrency(plan.dailyNeed)} daily. Try cutting down on non-essential categories like "Dining Out".`}
                                 </div>
 
                                 <button
                                     onClick={handleCreateGoal}
                                     className="btn btn-primary w-full justify-center mt-2 shadow-lg shadow-emerald-500/20"
                                 >
-                                    Confirm Goal
+                                    Confirm & Create Goal
                                 </button>
                             </div>
                         </div>

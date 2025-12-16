@@ -9,7 +9,7 @@ import { formatCurrency } from '../utils/format';
 const Dashboard = () => {
     const { totalBalance, monthlySpending, savingsPocket, transactions, addTransaction } = useFinTrack();
     const [isSimulating, setIsSimulating] = useState(false);
-    const [showBalance, setShowBalance] = useState(false); // Default hidden for privacy
+    const [showBalance, setShowBalance] = useState(true); // Default visible
 
     const [videoSpeed, setVideoSpeed] = useState(1.7); // Default speed
 

@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const FinTrackContext = createContext();
 
-const API_URL = '/api';
+
 
 export const useFinTrack = () => useContext(FinTrackContext);
 
@@ -25,75 +25,102 @@ export const FinTrackProvider = ({ children }) => {
     }, 5000);
   };
 
+  // Mock Data Generators
+  const generateId = () => Math.random().toString(36).substr(2, 9);
+
   // Auth Methods
   const login = async (email, password) => {
-    try {
-      const res = await fetch(`${API_URL}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUser(data.user);
-        localStorage.setItem('fintrack_user', JSON.stringify(data.user));
-        return true;
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (err) {
-      throw err;
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    // Simple mock validation (accept any non-empty credentials for demo)
+    if (email && password) {
+      const mockUser = { id: 'user_123', name: 'Demo User', email };
+      setUser(mockUser);
+      localStorage.setItem('fintrack_user', JSON.stringify(mockUser));
+      return true;
+    } else {
+      throw new Error("Invalid credentials");
     }
   };
 
   const signup = async (name, email, password) => {
-    try {
-      const res = await fetch(`${API_URL}/auth/signup`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password })
-      });
-      const data = await res.json();
-      if (res.ok) {
-        setUser(data.user);
-        localStorage.setItem('fintrack_user', JSON.stringify(data.user));
-        return true;
-      } else {
-        throw new Error(data.message);
-      }
-    } catch (err) {
-      throw err;
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
+    if (name && email && password) {
+      const mockUser = { id: `user_${Date.now()}`, name, email };
+      setUser(mockUser);
+      localStorage.setItem('fintrack_user', JSON.stringify(mockUser));
+      return true;
+    } else {
+      throw new Error("Invalid data");
     }
   };
 
   const logout = () => {
     setUser(null);
     localStorage.removeItem('fintrack_user');
+    localStorage.removeItem('fintrack_transactions');
+    localStorage.removeItem('fintrack_goals');
+    localStorage.removeItem('fintrack_pocket');
+    localStorage.removeItem('fintrack_budget');
+
     setTransactions([]);
     setGoals([]);
     setSavingsPocket(0);
     setBudget(0);
   };
 
-  // Fetch Initial Data (Only if logged in)
+  // Load Data from LocalStorage (Simulating Server Database)
   useEffect(() => {
     if (!user) return;
 
     setIsLoading(true);
-    fetch(`${API_URL}/data`)
-      .then(res => res.json())
-      .then(data => {
-        setTransactions(data.transactions || []);
-        setSavingsPocket(data.savingsPocket || 0);
-        setBudget(data.budget || 0);
-        setGoals(data.goals || []);
+
+    // Simulate network delay
+    setTimeout(() => {
+      try {
+        let storedTransactions = JSON.parse(localStorage.getItem('fintrack_transactions'));
+        let storedGoals = JSON.parse(localStorage.getItem('fintrack_goals'));
+        let storedBudget = JSON.parse(localStorage.getItem('fintrack_budget'));
+        let storedPocket = JSON.parse(localStorage.getItem('fintrack_pocket'));
+
+        // If no data exists, load dummy data
+        if (!storedTransactions || storedTransactions.length === 0) {
+          const dummyTransactions = [
+            { id: 't1', title: 'Salary', amount: 50000, category: 'Income', date: new Date().toISOString().split('T')[0], type: 'income' },
+            { id: 't2', title: 'Groceries', amount: 3500, category: 'Food', date: new Date().toISOString().split('T')[0], type: 'expense' },
+            { id: 't3', title: 'Internet Bill', amount: 4500, category: 'Bills', date: new Date().toISOString().split('T')[0], type: 'expense' },
+            { id: 't4', title: 'Coffee', amount: 450, category: 'Food', date: new Date().toISOString().split('T')[0], type: 'expense' }
+          ];
+          const dummyGoals = [{ id: 'g1', name: 'New Laptop', target: 150000, saved: 25000, deadline: '2025-12-31' }];
+          const dummyBudget = 20000;
+          const dummyPocket = 5000;
+
+          storedTransactions = dummyTransactions;
+          storedGoals = dummyGoals;
+          storedBudget = dummyBudget;
+          storedPocket = dummyPocket;
+
+          // Save dummy data to local storage so it persists
+          localStorage.setItem('fintrack_transactions', JSON.stringify(dummyTransactions));
+          localStorage.setItem('fintrack_goals', JSON.stringify(dummyGoals));
+          localStorage.setItem('fintrack_budget', JSON.stringify(dummyBudget));
+          localStorage.setItem('fintrack_pocket', JSON.stringify(dummyPocket));
+        }
+
+        setTransactions(storedTransactions || []);
+        setGoals(storedGoals || []);
+        setBudget(storedBudget || 0);
+        setSavingsPocket(storedPocket || 0);
+      } catch (err) {
+        console.error("Failed to load local data", err);
+        addNotification("Failed to load data.", "danger");
+      } finally {
         setIsLoading(false);
-      })
-      .catch(err => {
-        console.error("Failed to fetch data:", err);
-        addNotification("Failed to connect to server.", "danger");
-        setIsLoading(false);
-      });
+      }
+    }, 500);
   }, [user]);
 
   const calculateTotalBalance = () => {
@@ -112,23 +139,32 @@ export const FinTrackProvider = ({ children }) => {
       .reduce((acc, curr) => acc + curr.amount, 0);
   };
 
+
   const addTransaction = async (transaction) => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     try {
-      const res = await fetch(`${API_URL}/transactions`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(transaction)
-      });
-      const data = await res.json();
+      const newTransaction = { ...transaction, id: generateId() };
+      const updatedTransactions = [newTransaction, ...transactions];
 
-      setTransactions(prev => [data.transaction, ...prev]);
+      setTransactions(updatedTransactions);
+      localStorage.setItem('fintrack_transactions', JSON.stringify(updatedTransactions));
 
-      if (data.autoSaved > 0) {
-        setSavingsPocket(data.savingsPocket);
-        addNotification(`Auto-saved PKR ${data.autoSaved} to Savings Pocket!`, 'success');
-      } else if (transaction.type === 'income') {
+      // Auto-save logic (Mocking server logic)
+      if (transaction.type === 'income') {
+        const autoSaveAmount = transaction.amount * 0.20; // 20% rule
+        const newPocket = savingsPocket + autoSaveAmount;
+
+        setSavingsPocket(newPocket);
+        localStorage.setItem('fintrack_pocket', JSON.stringify(newPocket));
+
         addNotification(`Income received: PKR ${transaction.amount}`, 'success');
+        addNotification(`Auto-saved PKR ${autoSaveAmount} to Savings Pocket!`, 'success');
+      } else {
+        addNotification(`Transaction added: PKR ${transaction.amount}`, 'success');
       }
+
     } catch (err) {
       console.error(err);
       addNotification("Failed to save transaction.", "danger");
@@ -136,14 +172,16 @@ export const FinTrackProvider = ({ children }) => {
   };
 
   const addGoal = async (goal) => {
+    // Simulate API delay
+    await new Promise(resolve => setTimeout(resolve, 500));
+
     try {
-      const res = await fetch(`${API_URL}/goals`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(goal)
-      });
-      const data = await res.json();
-      setGoals(prev => [...prev, data.goal]);
+      const newGoal = { ...goal, id: generateId(), saved: 0 };
+      const updatedGoals = [...goals, newGoal];
+
+      setGoals(updatedGoals);
+      localStorage.setItem('fintrack_goals', JSON.stringify(updatedGoals));
+
       addNotification(`New Goal "${goal.name}" created!`, 'success');
     } catch (err) {
       console.error(err);
