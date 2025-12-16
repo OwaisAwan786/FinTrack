@@ -8,13 +8,13 @@ const NotificationToast = () => {
     if (notifications.length === 0) return null;
 
     return (
-        <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+        <div className="fixed bottom-6 right-4 left-4 md:left-auto md:right-6 md:w-auto flex flex-col gap-3 z-[60]">
             {notifications.map((note) => (
                 <div
                     key={note.id}
                     className={`flex items-center gap-3 p-4 rounded-xl shadow-lg border animate-fade-in backdrop-blur-md ${note.type === 'success' ? 'bg-emerald-500/10 border-emerald-500/50 text-emerald-100' :
-                            note.type === 'warning' ? 'bg-amber-500/10 border-amber-500/50 text-amber-100' :
-                                'bg-indigo-500/10 border-indigo-500/50 text-indigo-100'
+                        note.type === 'warning' ? 'bg-amber-500/10 border-amber-500/50 text-amber-100' :
+                            'bg-indigo-500/10 border-indigo-500/50 text-indigo-100'
                         }`}
                 >
                     {note.type === 'success' && <CheckCircle size={20} className="text-emerald-400" />}

@@ -19,13 +19,13 @@ const TransactionItem = ({ transaction }) => {
         <div className="flex items-center justify-between p-4 hover:bg-white/5 rounded-xl transition-colors border border-transparent hover:border-white/5 cursor-pointer group">
             <div className="flex items-center gap-4">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center ${isIncome
-                        ? 'bg-green-500/20 text-green-400'
-                        : 'bg-indigo-500/20 text-indigo-400'
+                    ? 'bg-green-500/20 text-green-400'
+                    : 'bg-indigo-500/20 text-indigo-400'
                     }`}>
                     <Icon size={18} />
                 </div>
-                <div>
-                    <h4 className="font-medium text-gray-200 group-hover:text-white transition-colors">{transaction.title}</h4>
+                <div className="min-w-0">
+                    <h4 className="font-medium text-gray-200 group-hover:text-white transition-colors truncate">{transaction.title}</h4>
                     <p className="text-xs text-gray-500">{transaction.date} • {transaction.category}</p>
                 </div>
             </div>
